@@ -60,3 +60,6 @@ export const ChatInputContainer = styled.div`
     display: none;
   }
 `
+export const ChatBottom = styled.div`
+  padding-bottom: 12.5rem;
+`
