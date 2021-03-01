@@ -1,10 +1,5 @@
 import React from "react"
-import {
-  SidebarContainer,
-  SidebarHeader,
-  SidebarInfo,
-  SidebarOptionContainer,
-} from "./Sidebar.styles"
+import { SidebarContainer, SidebarHeader, SidebarInfo } from "./Sidebar.styles"
 import SidebarOption from "./SidebarOption"
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord"
 import CreateIcon from "@material-ui/icons/Create"
@@ -17,11 +12,14 @@ import FileCopyIcon from "@material-ui/icons/FileCopy"
 import ExpandLessIcon from "@material-ui/icons/ExpandLess"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import AddIcon from "@material-ui/icons/Add"
-import { db } from "../../firebase"
+import { auth, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
+import { useAuthState } from "react-firebase-hooks/auth"
 
 const Sidebar = () => {
   const [channels, loading, error] = useCollection(db.collection("rooms"))
+  const [user] = useAuthState(auth)
+
   return (
     <SidebarContainer>
       <SidebarHeader>
@@ -29,7 +27,7 @@ const Sidebar = () => {
           <h2>Slack</h2>
           <h3>
             <FiberManualRecordIcon />
-            Benoit Lebacq
+            {user?.displayName}
           </h3>
         </SidebarInfo>
         <CreateIcon />

@@ -7,7 +7,7 @@ export const MessageContainer = styled.div`
 
   > img {
     height: 3.125rem;
-    border-radius: 50%;
+    border-radius: 8px;
   }
 `
 export const MessageInfo = styled.div`
