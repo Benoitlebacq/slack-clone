@@ -4,10 +4,13 @@ import { auth, db } from "../../firebase"
 import { ChatInputContainer } from "./chat.styles"
 import firebase from "firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
+import { useSelector } from "react-redux"
+import { selectTheme } from "../../features/appSlice"
 
 const ChatInput = ({ channelName, channelId, chatRef }) => {
   const [input, setInput] = useState(null)
   const [user] = useAuthState(auth)
+  const theme = useSelector(selectTheme)
 
   const sendMessage = (e) => {
     e.preventDefault()
@@ -30,12 +33,12 @@ const ChatInput = ({ channelName, channelId, chatRef }) => {
     setInput("")
   }
   return (
-    <ChatInputContainer>
+    <ChatInputContainer darkTheme={!theme}>
       <form>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={`Message #${channelName}`}
+          placeholder={`Send a Message to #${channelName}`}
         />
         <Button hidden type="submit" onClick={sendMessage}>
           SEND

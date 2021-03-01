@@ -10,6 +10,12 @@ export const HeaderContainer = styled.div`
   padding: 0.625rem 0;
   background-color: var(--slack-color);
   color: whitesmoke;
+  ${({ darkTheme }) =>
+    darkTheme &&
+    `
+    background-color: #212121;
+    color: white;
+  `}
 `
 export const HeaderLeft = styled.div`
   flex: 0.3;
@@ -32,6 +38,12 @@ export const Headersearch = styled.div`
   padding: 0 3.125rem;
   color: gray;
   border: 1px solid gray;
+  ${({ darkTheme }) =>
+    darkTheme &&
+    `
+    background-color: #212121;
+    color: white;
+  `}
 
   > input {
     background-color: transparent;

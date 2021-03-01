@@ -15,13 +15,16 @@ import AddIcon from "@material-ui/icons/Add"
 import { auth, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
 import { useAuthState } from "react-firebase-hooks/auth"
+import { useSelector } from "react-redux"
+import { selectTheme } from "../../features/appSlice"
 
 const Sidebar = () => {
   const [channels, loading, error] = useCollection(db.collection("rooms"))
   const [user] = useAuthState(auth)
+  const theme = useSelector(selectTheme)
 
   return (
-    <SidebarContainer>
+    <SidebarContainer darkTheme={!theme}>
       <SidebarHeader>
         <SidebarInfo>
           <h2>Slack</h2>

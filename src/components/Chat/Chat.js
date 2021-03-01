@@ -10,14 +10,16 @@ import {
 } from "./chat.styles"
 import { StarBorderOutlined, InfoOutlined } from "@material-ui/icons"
 import { useSelector } from "react-redux"
-import { selectRoomId } from "../../features/appSlice"
+import { selectRoomId, selectTheme } from "../../features/appSlice"
 import ChatInput from "./ChatInput"
 import { useDocument, useCollection } from "react-firebase-hooks/firestore"
 import { db } from "../../firebase"
+import Welcome from "../Welcome/Welcome"
 
 const Chat = () => {
   const chatRef = useRef(null)
   const roomId = useSelector(selectRoomId)
+  const theme = useSelector(selectTheme)
   const [roomDetails] = useDocument(
     roomId && db.collection("rooms").doc(roomId)
   )
@@ -37,7 +39,7 @@ const Chat = () => {
   }, [roomId, loading])
 
   return (
-    <ChatContainer>
+    <ChatContainer darkTheme={!theme}>
       {roomDetails && roomMessages ? (
         <>
           <ChatHeader>
@@ -76,7 +78,7 @@ const Chat = () => {
           />
         </>
       ) : (
-        <p>// TODO : defaut component</p>
+        <Welcome />
       )}
     </ChatContainer>
   )

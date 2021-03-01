@@ -8,6 +8,13 @@ export const SidebarContainer = styled.div`
   max-width: 16.25rem;
   margin-top: 3.75rem;
 
+  ${({ darkTheme }) =>
+    darkTheme &&
+    `
+    background-color: #212121;
+    color: white;
+  `}
+
   > hr {
     margin-top: 0.625rem;
     margin-bottom: 0.625rem;

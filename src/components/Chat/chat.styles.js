@@ -5,6 +5,12 @@ export const ChatContainer = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   margin-top: 3.75rem;
+  ${({ darkTheme }) =>
+    darkTheme &&
+    `
+    background-color: #323232;
+    color: white;
+  `}
 `
 export const ChatHeader = styled.div`
   display: flex;
@@ -54,6 +60,16 @@ export const ChatInputContainer = styled.div`
     border-radius: 3px;
     padding: 1.125rem;
     outline: none;
+    ${({ darkTheme }) =>
+      darkTheme &&
+      `
+    background-color: #323232;
+    color: white;
+    border: 1px solid lightgray;
+    ::placeholder {
+      color: lightgray
+    }
+  `}
   }
 
   > form > button {
