@@ -13,18 +13,30 @@ export const SidebarContainer = styled.div`
     `
     background-color: #212121;
     color: white;
+    border-top: 1px solid dimgray;
   `}
 
   > hr {
     margin-top: 0.625rem;
     margin-bottom: 0.625rem;
     border: 1px solid #49274b;
+
+    ${({ darkTheme }) =>
+      darkTheme &&
+      `
+    border: 1px solid dimgray;
+  `}
   }
 `
 export const SidebarHeader = styled.div`
   display: flex;
   border-bottom: 1px solid #49274b;
   padding: 0.8125rem;
+  ${({ darkTheme }) =>
+    darkTheme &&
+    `
+    border-bottom: 1px solid dimgray;
+  `}
 
   > .MuiSvgIcon-root {
     padding: 0.5rem;
@@ -67,6 +79,12 @@ export const SidebarOptionContainer = styled.div`
   :hover {
     opacity: 0.8;
     background-color: #340e36;
+    ${({ darkTheme }) =>
+      darkTheme &&
+      `
+      opacity: 1;
+      background-color: #3A3B3C;
+  `}
   }
 
   > h3 {

@@ -25,8 +25,8 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer darkTheme={!theme}>
-      <SidebarHeader>
-        <SidebarInfo>
+      <SidebarHeader darkTheme={!theme}>
+        <SidebarInfo darkTheme={!theme}>
           <h2>Slack</h2>
           <h3>
             <FiberManualRecordIcon />

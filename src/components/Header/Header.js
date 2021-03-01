@@ -49,7 +49,14 @@ const Header = () => {
         <HelpOutlineIcon />
       </HeaderRight>
       <FormControlLabel
-        control={<Switch checked={isDarkTheme} onChange={handleChange} />}
+        control={
+          <Switch
+            checked={isDarkTheme}
+            onChange={handleChange}
+            size="small"
+            color="white"
+          />
+        }
         label="Dark Theme"
       />
     </HeaderContainer>
