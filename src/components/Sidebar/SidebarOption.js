@@ -13,6 +13,7 @@ const SidebarOption = ({ Icon, title, addChannelOption, id }) => {
     if (channelName) {
       db.collection("rooms").add({
         name: channelName,
+        // TODO : createdBy: user.uid
       })
     }
   }
