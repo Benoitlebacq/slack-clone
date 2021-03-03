@@ -100,13 +100,14 @@ const Chat = () => {
                             "success"
                           )
                         } else {
-                          Swal.fire(
-                            "Cancelled",
-                            `You can't delete channel ${
+                          Swal.fire({
+                            title: "Cancelled",
+                            text: `You can't delete channel ${
                               roomDetails?.data().name
                             }, because you didn't create it.`,
-                            "error"
-                          )
+                            icon: "error",
+                            background: `${backgroundColor}`,
+                          })
                         }
                       } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire(
