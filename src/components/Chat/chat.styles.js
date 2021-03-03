@@ -40,6 +40,10 @@ export const ChatHeaderRight = styled.div`
     align-items: center;
     font-size: 0.875rem;
   }
+
+  > p > .MuiSvgIcon-root {
+    cursor: pointer;
+  }
 `
 export const ChatMessages = styled.div``
 

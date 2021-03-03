@@ -44,6 +44,9 @@ export const SidebarHeader = styled.div`
     font-size: 1.125rem;
     background-color: white;
     border-radius: 50%;
+    :hover {
+      cursor: pointer;
+    }
   }
 `
 export const SidebarInfo = styled.div`

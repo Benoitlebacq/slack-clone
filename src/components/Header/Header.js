@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef } from "react"
 import {
   HeaderContainer,
   HeaderLeft,
@@ -19,32 +19,42 @@ import { useCollection } from "react-firebase-hooks/firestore"
 
 const Header = () => {
   const [user] = useAuthState(auth)
-  const [isDarkTheme, setIsDarkTheme] = useState(false)
+  const darkTheme = useRef(true)
   const dispatch = useDispatch()
   const theme = useSelector(selectTheme)
   const [users] = useCollection(db.collection("users"))
 
-  const handleChange = () => {
-    // console.log("userID avant forEach ::: ", user.uid)
-    users.forEach((e) =>
-      e.data().id === user.uid ? console.log("oui") : console.log("non")
+  // Find User in firebase and set darkTheme value
+  useEffect(() => {
+    const userArray = []
+    users?.forEach((e) =>
+      Object.values(e.data()).includes(user.uid)
+        ? userArray.push(e.data())
+        : null
     )
-    // users.docs.map((doc) => console.log(doc.data()))
-    // console.log(
-    //   "COLLECTION ::::: ",
-    //   db.collection("users").doc("FSfxUKBdPkYB0Vo7v8wl").update()
-    // )
-    // .map((doc) => console.log(doc))
+    darkTheme.current = [...userArray][0]?.isDarkTheme
+  }, [user.uid, users])
 
-    setIsDarkTheme(!isDarkTheme)
+  const handleChange = () => {
+    darkTheme.current = !darkTheme.current
+
+    // Change isDarkTheme bool in firebase database
+    const changeIsDarkTheme = (doc, id) => {
+      if (doc.data().id === id) {
+        return db.collection("users").doc(doc.id).update({
+          isDarkTheme: darkTheme.current,
+        })
+      }
+      return
+    }
+    users.docs.forEach((doc) => changeIsDarkTheme(doc, user.uid))
+
     dispatch(
       changeTheme({
-        theme: isDarkTheme,
+        theme: !darkTheme.current,
       })
     )
   }
-
-  //console.log(users?.docs.map((doc) => doc.data()))
 
   return (
     <HeaderContainer darkTheme={!theme}>
@@ -52,7 +62,7 @@ const Header = () => {
         <HeaderAvatar
           src={user?.photoURL}
           alt={user?.displayName}
-          onClick={() => auth.signOut()}
+          onClick={() => alert("//TODO : PAGE DE PERSONNALISATION")}
         />
         <AccessTimeIcon />
       </HeaderLeft>
@@ -65,12 +75,7 @@ const Header = () => {
       </HeaderRight>
       <FormControlLabel
         control={
-          <Switch
-            checked={isDarkTheme}
-            onChange={handleChange}
-            size="small"
-            color="white"
-          />
+          <Switch onChange={handleChange} size="small" checked={!theme} />
         }
         label="Dark Theme"
       />

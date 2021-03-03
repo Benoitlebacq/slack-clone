@@ -36,7 +36,7 @@ const ChatInput = ({ channelName, channelId, chatRef }) => {
     <ChatInputContainer darkTheme={!theme}>
       <form>
         <input
-          value={input}
+          value={input || ""}
           onChange={(e) => setInput(e.target.value)}
           placeholder={`Send a Message to #${channelName}`}
         />

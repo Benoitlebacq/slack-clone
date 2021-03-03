@@ -4,7 +4,14 @@ import { db } from "../../firebase"
 import { enterRoom, selectTheme } from "../../features/appSlice"
 import { useDispatch, useSelector } from "react-redux"
 
-const SidebarOption = ({ Icon, title, addChannelOption, id }) => {
+const SidebarOption = ({
+  Icon,
+  title,
+  addChannelOption,
+  id,
+  expandApps,
+  expandChannels,
+}) => {
   const theme = useSelector(selectTheme)
   const dispatch = useDispatch()
   const addChannel = () => {
@@ -32,7 +39,17 @@ const SidebarOption = ({ Icon, title, addChannelOption, id }) => {
       darkTheme={!theme}
       onClick={addChannelOption ? addChannel : selectChannel}
     >
-      {Icon && <Icon fontSize="small" style={{ padding: 10 }} />}
+      {expandApps ? (
+        <Icon fontSize="small" style={{ padding: 10 }} onClick={expandApps} />
+      ) : expandChannels ? (
+        <Icon
+          fontSize="small"
+          style={{ padding: 10 }}
+          onClick={expandChannels}
+        />
+      ) : (
+        Icon && <Icon fontSize="small" style={{ padding: 10 }} />
+      )}
       {Icon ? (
         <h3>{title}</h3>
       ) : (

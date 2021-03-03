@@ -5,9 +5,7 @@ import { auth, provider, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
 
 function Login() {
-  //const [channels, loading, error] = useCollection(db.collection("rooms"))
   const [users] = useCollection(db.collection("users"))
-  //console.log(users?.docs.map((doc) => doc.data()))
 
   const signIn = (e) => {
     e.preventDefault()
@@ -21,8 +19,9 @@ function Login() {
         } else {
           return db.collection("users").add({
             userName: result.user.displayName,
-            themePreference: "white",
+            isDarkTheme: false,
             id: result.user.uid,
+            photoURL: result.user.photoURL,
           })
         }
       })

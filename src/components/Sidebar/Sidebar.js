@@ -1,17 +1,20 @@
-import React from "react"
+import React, { useState } from "react"
+import Expand from "react-expand-animated"
 import { SidebarContainer, SidebarHeader, SidebarInfo } from "./Sidebar.styles"
 import SidebarOption from "./SidebarOption"
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord"
-import CreateIcon from "@material-ui/icons/Create"
-import InsertCommentIcon from "@material-ui/icons/InsertComment"
-import InboxIcon from "@material-ui/icons/Inbox"
-import DraftsIcon from "@material-ui/icons/Drafts"
-import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder"
-import AppsIcon from "@material-ui/icons/Apps"
-import FileCopyIcon from "@material-ui/icons/FileCopy"
-import ExpandLessIcon from "@material-ui/icons/ExpandLess"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import AddIcon from "@material-ui/icons/Add"
+import {
+  FiberManualRecord,
+  InsertComment,
+  Inbox,
+  Drafts,
+  BookmarkBorder,
+  Apps,
+  FileCopy,
+  ExpandLess,
+  ExpandMore,
+  Add,
+  ExitToApp,
+} from "@material-ui/icons"
 import { auth, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -19,9 +22,30 @@ import { useSelector } from "react-redux"
 import { selectTheme } from "../../features/appSlice"
 
 const Sidebar = () => {
-  const [channels, loading, error] = useCollection(db.collection("rooms"))
+  const [channels] = useCollection(db.collection("rooms"))
   const [user] = useAuthState(auth)
   const theme = useSelector(selectTheme)
+  const [isAppsExpanded, setIsAppsExpanded] = useState(true)
+  const [isChannelsExpanded, setIsChannelsExpanded] = useState(true)
+  const [expandShow, setExpandShow] = useState({
+    Icon: ExpandLess,
+    tilte: "Show Less",
+  })
+  const [expandChannelsIcon, setExpandChannelsIcon] = useState(ExpandMore)
+
+  const expandApps = () => {
+    setIsAppsExpanded(!isAppsExpanded)
+    isAppsExpanded
+      ? setExpandShow({ Icon: ExpandMore, title: "Show More" })
+      : setExpandShow({ Icon: ExpandLess, title: "Show Less" })
+  }
+
+  const expandChannels = () => {
+    setIsChannelsExpanded(!isChannelsExpanded)
+    isChannelsExpanded
+      ? setExpandChannelsIcon(ExpandLess)
+      : setExpandChannelsIcon(ExpandMore)
+  }
 
   return (
     <SidebarContainer darkTheme={!theme}>
@@ -29,26 +53,37 @@ const Sidebar = () => {
         <SidebarInfo darkTheme={!theme}>
           <h2>Slack</h2>
           <h3>
-            <FiberManualRecordIcon />
+            <FiberManualRecord />
             {user?.displayName}
           </h3>
         </SidebarInfo>
-        <CreateIcon />
+        <ExitToApp onClick={() => auth.signOut()} />
       </SidebarHeader>
-      <SidebarOption Icon={InsertCommentIcon} title="Threads" />
-      <SidebarOption Icon={InboxIcon} title="Mentions & Reactions" />
-      <SidebarOption Icon={DraftsIcon} title="Saved Items" />
-      <SidebarOption Icon={BookmarkBorderIcon} title="Channel Browser" />
-      <SidebarOption Icon={AppsIcon} title="Apps" />
-      <SidebarOption Icon={FileCopyIcon} title="File Browser" />
-      <SidebarOption Icon={ExpandLessIcon} title="Show Less" />
+      <Expand open={isAppsExpanded}>
+        <SidebarOption Icon={InsertComment} title="Threads" />
+        <SidebarOption Icon={Inbox} title="Mentions & Reactions" />
+        <SidebarOption Icon={Drafts} title="Saved Items" />
+        <SidebarOption Icon={BookmarkBorder} title="Channel Browser" />
+        <SidebarOption Icon={Apps} title="Apps" />
+        <SidebarOption Icon={FileCopy} title="File Browser" />
+      </Expand>
+      <SidebarOption
+        Icon={expandShow.Icon}
+        title={expandShow.title || "Show Less"}
+        expandApps={expandApps}
+      />
       <hr />
-      <SidebarOption Icon={ExpandMoreIcon} title="Channels" />
-      <hr />
-      <SidebarOption Icon={AddIcon} addChannelOption title="Add Channel" />
-      {channels?.docs.map((doc) => (
-        <SidebarOption title={doc.data().name} key={doc.id} id={doc.id} />
-      ))}
+      <SidebarOption
+        Icon={expandChannelsIcon}
+        title="Channels"
+        expandChannels={expandChannels}
+      />
+      <Expand open={isChannelsExpanded}>
+        <SidebarOption Icon={Add} addChannelOption title="Add Channel" />
+        {channels?.docs.map((doc) => (
+          <SidebarOption title={doc.data().name} key={doc.id} id={doc.id} />
+        ))}
+      </Expand>
     </SidebarContainer>
   )
 }
