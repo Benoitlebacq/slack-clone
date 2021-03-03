@@ -19,9 +19,9 @@ import { useCollection } from "react-firebase-hooks/firestore"
 
 const Header = () => {
   const [user] = useAuthState(auth)
-  const darkTheme = useRef(true)
+  const darkTheme = useRef()
   const dispatch = useDispatch()
-  const theme = useSelector(selectTheme)
+  const themeIsDark = useSelector(selectTheme)
   const [users] = useCollection(db.collection("users"))
 
   // Find User in firebase and set darkTheme value
@@ -32,32 +32,39 @@ const Header = () => {
         ? userArray.push(e.data())
         : null
     )
-    darkTheme.current = [...userArray][0]?.isDarkTheme
-  }, [user.uid, users])
+    darkTheme.current = ![...userArray][0]?.isDarkTheme
+
+    dispatch(
+      changeTheme({
+        themeIsDark: darkTheme.current,
+      })
+    )
+  }, [])
 
   const handleChange = () => {
     darkTheme.current = !darkTheme.current
 
-    // Change isDarkTheme bool in firebase database
+    // This Function Finds user and Changes isDarkTheme bool in firebase database
     const changeIsDarkTheme = (doc, id) => {
       if (doc.data().id === id) {
         return db.collection("users").doc(doc.id).update({
-          isDarkTheme: darkTheme.current,
+          isDarkTheme: !darkTheme.current,
         })
       }
       return
     }
+
     users.docs.forEach((doc) => changeIsDarkTheme(doc, user.uid))
 
     dispatch(
       changeTheme({
-        theme: !darkTheme.current,
+        themeIsDark: !darkTheme.current,
       })
     )
   }
 
   return (
-    <HeaderContainer darkTheme={!theme}>
+    <HeaderContainer darkTheme={themeIsDark}>
       <HeaderLeft>
         <HeaderAvatar
           src={user?.photoURL}
@@ -66,7 +73,7 @@ const Header = () => {
         />
         <AccessTimeIcon />
       </HeaderLeft>
-      <Headersearch darkTheme={!theme}>
+      <Headersearch darkTheme={themeIsDark}>
         <input placeholder="search" />
         <SearchIcon />
       </Headersearch>
@@ -75,7 +82,7 @@ const Header = () => {
       </HeaderRight>
       <FormControlLabel
         control={
-          <Switch onChange={handleChange} size="small" checked={!theme} />
+          <Switch onChange={handleChange} size="small" checked={themeIsDark} />
         }
         label="Dark Theme"
       />

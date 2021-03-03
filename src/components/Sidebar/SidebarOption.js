@@ -1,8 +1,9 @@
 import React from "react"
 import { SidebarOptionContainer, SidebarOptionChannel } from "./Sidebar.styles"
-import { db } from "../../firebase"
+import { auth, db } from "../../firebase"
 import { enterRoom, selectTheme } from "../../features/appSlice"
 import { useDispatch, useSelector } from "react-redux"
+import { useAuthState } from "react-firebase-hooks/auth"
 
 const SidebarOption = ({
   Icon,
@@ -12,7 +13,8 @@ const SidebarOption = ({
   expandApps,
   expandChannels,
 }) => {
-  const theme = useSelector(selectTheme)
+  const [user] = useAuthState(auth)
+  const themeIsDark = useSelector(selectTheme)
   const dispatch = useDispatch()
   const addChannel = () => {
     const channelName = prompt("Please enter en channel name")
@@ -20,7 +22,8 @@ const SidebarOption = ({
     if (channelName) {
       db.collection("rooms").add({
         name: channelName,
-        // TODO : createdBy: user.uid
+        createdBy: user?.uid,
+        creatorName: user?.displayName,
       })
     }
   }
@@ -36,7 +39,7 @@ const SidebarOption = ({
 
   return (
     <SidebarOptionContainer
-      darkTheme={!theme}
+      darkTheme={themeIsDark}
       onClick={addChannelOption ? addChannel : selectChannel}
     >
       {expandApps ? (

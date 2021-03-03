@@ -15,8 +15,15 @@ export const ChatContainer = styled.div`
 export const ChatHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 1.25rem;
+  padding: 1.27rem;
   border-bottom: 1px solid lightgray;
+  border-top: 1px solid lightgray;
+  ${({ darkTheme }) =>
+    darkTheme &&
+    `
+      border-bottom: 1px solid dimgray;
+  border-top: 1px solid dimgray;
+  `}
 `
 
 export const ChatHeaderLeft = styled.div`
@@ -32,6 +39,10 @@ export const ChatHeaderLeft = styled.div`
   > h4 > .muiSvgIcon-root {
     margin-left: 0.625rem;
     font-size: 1.125rem;
+  }
+  > p {
+    font-size: 0.8rem;
+    color: gray;
   }
 `
 export const ChatHeaderRight = styled.div`

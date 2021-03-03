@@ -24,7 +24,7 @@ import { selectTheme } from "../../features/appSlice"
 const Sidebar = () => {
   const [channels] = useCollection(db.collection("rooms"))
   const [user] = useAuthState(auth)
-  const theme = useSelector(selectTheme)
+  const themeIsDark = useSelector(selectTheme)
   const [isAppsExpanded, setIsAppsExpanded] = useState(true)
   const [isChannelsExpanded, setIsChannelsExpanded] = useState(true)
   const [expandShow, setExpandShow] = useState({
@@ -48,9 +48,9 @@ const Sidebar = () => {
   }
 
   return (
-    <SidebarContainer darkTheme={!theme}>
-      <SidebarHeader darkTheme={!theme}>
-        <SidebarInfo darkTheme={!theme}>
+    <SidebarContainer darkTheme={themeIsDark}>
+      <SidebarHeader darkTheme={themeIsDark}>
+        <SidebarInfo darkTheme={themeIsDark}>
           <h2>Slack</h2>
           <h3>
             <FiberManualRecord />

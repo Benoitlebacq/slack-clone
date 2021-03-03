@@ -10,7 +10,7 @@ import { selectTheme } from "../../features/appSlice"
 const ChatInput = ({ channelName, channelId, chatRef }) => {
   const [input, setInput] = useState(null)
   const [user] = useAuthState(auth)
-  const theme = useSelector(selectTheme)
+  const themeIsDark = useSelector(selectTheme)
 
   const sendMessage = (e) => {
     e.preventDefault()
@@ -33,7 +33,7 @@ const ChatInput = ({ channelName, channelId, chatRef }) => {
     setInput("")
   }
   return (
-    <ChatInputContainer darkTheme={!theme}>
+    <ChatInputContainer darkTheme={themeIsDark}>
       <form>
         <input
           value={input || ""}
