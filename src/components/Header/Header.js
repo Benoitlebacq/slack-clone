@@ -32,14 +32,15 @@ const Header = () => {
         ? userArray.push(e.data())
         : null
     )
-    darkTheme.current = ![...userArray][0]?.isDarkTheme
+
+    darkTheme.current = [...userArray]?.[0]?.isDarkTheme
 
     dispatch(
       changeTheme({
         themeIsDark: darkTheme.current,
       })
     )
-  }, [])
+  }, [dispatch, user.uid, users])
 
   const handleChange = () => {
     darkTheme.current = !darkTheme.current
