@@ -27,6 +27,14 @@ export const HeaderLeft = styled.div`
     margin-left: auto;
     margin-right: 1.875rem;
   }
+  > img {
+    height: 2.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    :hover {
+      opacity: 0.8;
+    }
+  }
 `
 export const Headersearch = styled.div`
   flex: 0.4;
@@ -62,11 +70,5 @@ export const HeaderRight = styled.div`
   > .MuiSvgIcon-root {
     margin-left: auto;
     margin-right: 1.875rem;
-  }
-`
-export const HeaderAvatar = styled(Avatar)`
-  cursor: pointer;
-  :hover {
-    opacity: 0.8;
   }
 `

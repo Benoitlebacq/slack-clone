@@ -8,6 +8,7 @@ import {
   ChatHeader,
   ChatMessages,
   ChatBottom,
+  NumberOfPeopleInChat,
 } from "./chat.styles"
 import {
   StarBorderOutlined,
@@ -22,8 +23,10 @@ import Welcome from "../Welcome/Welcome"
 import Swal from "sweetalert2/src/sweetalert2.js"
 import { enterRoom } from "../../features/appSlice"
 import { useAuthState } from "react-firebase-hooks/auth"
+import PeopleIcon from "@material-ui/icons/People"
 
 const Chat = () => {
+  //const [userArrayWithDuplicate, setUserArrayWithDuplicate] = useState([])
   const [isPopupDark, setIsPopupDark] = useState("default")
   const dispatch = useDispatch()
   const chatRef = useRef(null)
@@ -42,12 +45,14 @@ const Chat = () => {
         .orderBy("timestamp", "asc")
   )
 
+  // scroll chat to the bottom
   useEffect(() => {
     chatRef?.current?.scrollIntoView({
       behavior: "smooth",
     })
   }, [roomId, loading])
 
+  // Set theme for PopUp
   useEffect(() => {
     if (themeIsDark) {
       setIsPopupDark("dark")
@@ -58,7 +63,6 @@ const Chat = () => {
   }, [themeIsDark])
 
   const enableSweetAlert2Theme = (theme) => {
-    console.log(typeof theme, theme)
     document.head
       .querySelector("#swal2-theme-styles")
       .setAttribute(
@@ -102,9 +106,9 @@ const Chat = () => {
         } else {
           Swal.fire({
             title: "Cancelled",
-            text: `You can't delete channel ${
+            text: `You can't delete channel "${
               roomDetails?.data().name
-            }, because you didn't create it.`,
+            }", because you didn't create it.`,
             color: "white",
             icon: "error",
           })
@@ -114,6 +118,8 @@ const Chat = () => {
       }
     })
   }
+
+  const userArrayWithDuplicate = []
 
   return (
     <ChatContainer darkTheme={themeIsDark}>
@@ -129,9 +135,19 @@ const Chat = () => {
             </ChatHeaderLeft>
             <ChatHeaderRight>
               <p>
-                <InfoOutlined
-                  onClick={() => alert("TODO : pop up and delete")}
-                />{" "}
+                <PeopleIcon
+                  onClick={() => alert([...new Set(userArrayWithDuplicate)])}
+                />
+                <NumberOfPeopleInChat>
+                  {
+                    (roomMessages?.docs.forEach((doc) => {
+                      const { user } = doc.data()
+                      userArrayWithDuplicate.push(user)
+                    }),
+                    [...new Set(userArrayWithDuplicate)].length)
+                  }
+                </NumberOfPeopleInChat>
+                <InfoOutlined />{" "}
                 <DeleteForever onClick={() => toggleAlertWithTheme()} />
               </p>
             </ChatHeaderRight>

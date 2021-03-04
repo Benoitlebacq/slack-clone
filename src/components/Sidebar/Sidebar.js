@@ -14,6 +14,7 @@ import {
   ExpandMore,
   Add,
   ExitToApp,
+  Edit,
 } from "@material-ui/icons"
 import { auth, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
@@ -57,7 +58,7 @@ const Sidebar = () => {
             {user?.displayName}
           </h3>
         </SidebarInfo>
-        <ExitToApp onClick={() => auth.signOut()} />
+        <Edit onClick={() => alert("TODO : EDIT USER DETAILS")} />
       </SidebarHeader>
       <Expand open={isAppsExpanded}>
         <SidebarOption Icon={InsertComment} title="Threads" />

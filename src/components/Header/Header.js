@@ -3,7 +3,6 @@ import {
   HeaderContainer,
   HeaderLeft,
   HeaderRight,
-  HeaderAvatar,
   Headersearch,
 } from "./header.styles"
 import { useDispatch, useSelector } from "react-redux"
@@ -67,10 +66,10 @@ const Header = () => {
   return (
     <HeaderContainer darkTheme={themeIsDark}>
       <HeaderLeft>
-        <HeaderAvatar
+        <img
           src={user?.photoURL}
           alt={user?.displayName}
-          onClick={() => alert("//TODO : PAGE DE PERSONNALISATION")}
+          onClick={() => auth.signOut()}
         />
         <AccessTimeIcon />
       </HeaderLeft>
