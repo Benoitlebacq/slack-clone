@@ -10,6 +10,7 @@ const Welcome = () => {
       />
       <WelcomeTitle>Welcome to slack clone V1 </WelcomeTitle>
       <p>You can add Channel or Select a Channel on the sidebar</p>
+      <p>You can toggle Dark mode in the Header</p>
     </WelcomeContainer>
   )
 }

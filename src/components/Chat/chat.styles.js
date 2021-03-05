@@ -46,13 +46,11 @@ export const ChatHeaderLeft = styled.div`
   }
 `
 export const ChatHeaderRight = styled.div`
-  > p {
-    display: flex;
-    align-items: center;
-    font-size: 0.875rem;
-  }
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
 
-  > p > .MuiSvgIcon-root {
+  > .MuiSvgIcon-root {
     cursor: pointer;
   }
 `

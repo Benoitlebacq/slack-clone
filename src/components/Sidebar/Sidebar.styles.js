@@ -92,14 +92,24 @@ export const SidebarOptionContainer = styled.div`
 
   > h3 {
     font-weight: 500;
+    display: flex;
+    align-items: center;
   }
 
   > h3 > span {
-    padding: 0.95rem;
+    padding-left: 0.95rem;
+  }
+  > h3 > span > .MuiSvgIcon-root {
+    margin-left: -0.3rem;
+    margin-right: 0.6rem;
   }
 `
 
 export const SidebarOptionChannel = styled.h3`
   padding: 0.625rem 0;
   font-weight: 300;
+`
+export const Hashtag = styled.div`
+  margin-left: 0.95rem;
+  margin-right: 0.95rem;
 `
