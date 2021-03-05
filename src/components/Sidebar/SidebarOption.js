@@ -15,7 +15,6 @@ const SidebarOption = ({
   Icon,
   title,
   addChannelOption,
-  isPrivate,
   channelPassword,
   id,
   expandApps,
@@ -44,63 +43,72 @@ const SidebarOption = ({
       )
   }
 
-  const addChannelPopupWithTheme = async (isPrivate) => {
-    isPrivate
-      ? await Swal.mixin({
-          willOpen: () => enableSweetAlert2Theme(isPopupDark),
-          confirmButtonText: "Next &rarr;",
-          showCancelButton: true,
-          progressSteps: ["1", "2", "3"],
+  const addChannelPopupWithTheme = async () => {
+    const { value: formValues } = await Swal.fire({
+      willOpen: () => enableSweetAlert2Theme(isPopupDark),
+      title: "Enter Channel Name",
+      html:
+        '<input id="swal-input2" class="swal2-input">' +
+        "<div>Create Private Channel ?</div>" +
+        '<input type="checkbox" id="swal-input1" class="swal2-checkbox" >',
+      focusConfirm: false,
+      preConfirm: () => {
+        return [
+          document.getElementById("swal-input1").checked,
+          document.getElementById("swal-input2").value,
+        ]
+      },
+      allowOutsideClick: false,
+    })
+    if (!formValues?.[0] && formValues?.[1] !== "") {
+      db.collection("rooms").add({
+        name: formValues[1],
+        createdBy: user?.uid,
+        creatorName: user?.displayName,
+      })
+    } else if (formValues[0] && formValues[1] !== "") {
+      Swal.mixin({
+        confirmButtonText: "Next &rarr;",
+        showCancelButton: true,
+        progressSteps: ["1", "2"],
+        allowOutsideClick: false,
+      })
+        .queue([
+          { input: "password", title: "Enter the password" },
+          { input: "password", title: "Enter the password again" },
+        ])
+        .then((result) => {
+          if (result.dismiss === "cancel") {
+            return
+          }
+          if (result.value[0] !== result.value[1]) {
+            Swal.fire({
+              title: `You must enter the same password`,
+              icon: "error",
+              allowOutsideClick: () => !Swal.isLoading(),
+            })
+          }
+          if (result.value[0] === result.value[1]) {
+            db.collection("rooms").add({
+              name: result.value[0],
+              createdBy: user?.uid,
+              creatorName: user?.displayName,
+              channelPassword: result.value[1],
+            })
+            Swal.fire({
+              title: `The Private Channel "#${result.value[0]}" has been created`,
+              confirmButtonText: "Done!",
+              allowOutsideClick: () => !Swal.isLoading(),
+            })
+          }
         })
-          .queue([
-            { input: "text", title: "Enter the Private Channel Name" },
-            { input: "password", title: "Enter the password" },
-            { input: "password", title: "Enter the password again" },
-          ])
-          .then((result) => {
-            if (result.dismiss === "cancel") {
-              return
-            }
-            if (result.value[1] === result.value[2] && result.value[0] !== "") {
-              db.collection("rooms").add({
-                name: result.value[0],
-                createdBy: user?.uid,
-                creatorName: user?.displayName,
-                channelPassword: result.value[1],
-              })
-              Swal.fire({
-                title: `The Private Channel "#${result.value[0]}" has been created`,
-                confirmButtonText: "Done!",
-                allowOutsideClick: () => !Swal.isLoading(),
-              })
-            } else if (!result.value[0]) {
-              console.log("NOM DE CHANNEL VIDE")
-            }
-          })
-      : await Swal.fire({
-          willOpen: () => enableSweetAlert2Theme(isPopupDark),
-          title: "Please enter en channel name",
-          input: "text",
-          inputAttributes: {
-            autocapitalize: "off",
-          },
-          showCancelButton: true,
-          showLoaderOnConfirm: true,
-          confirmButtonText: "Confirm",
-          confirmButtonColor: "#3085d6",
-          cancelButtonText: "Cancel",
-          cancelButtonColor: "#d33",
-          preConfirm: (channelName) => {
-            if (channelName) {
-              db.collection("rooms").add({
-                name: channelName,
-                createdBy: user?.uid,
-                creatorName: user?.displayName,
-              })
-            }
-          },
-          allowOutsideClick: () => !Swal.isLoading(),
-        })
+    } else if (formValues[1] === "") {
+      Swal.fire({
+        title: `You must enter a Channel name`,
+        icon: "error",
+        allowOutsideClick: () => !Swal.isLoading(),
+      })
+    }
   }
 
   const selectChannel = () => {
@@ -130,11 +138,7 @@ const SidebarOption = ({
   return (
     <SidebarOptionContainer
       darkTheme={themeIsDark}
-      onClick={
-        addChannelOption
-          ? () => addChannelPopupWithTheme(isPrivate)
-          : selectChannel
-      }
+      onClick={addChannelOption ? addChannelPopupWithTheme : selectChannel}
     >
       {expandApps ? (
         <Icon fontSize="small" style={{ padding: 10 }} onClick={expandApps} />

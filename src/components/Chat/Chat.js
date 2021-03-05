@@ -27,7 +27,6 @@ import PeopleIcon from "@material-ui/icons/People"
 import PersonAddIcon from "@material-ui/icons/PersonAdd"
 
 const Chat = () => {
-  //const [userArrayWithDuplicate, setUserArrayWithDuplicate] = useState([])
   const [isPopupDark, setIsPopupDark] = useState("default")
   const dispatch = useDispatch()
   const chatRef = useRef(null)
