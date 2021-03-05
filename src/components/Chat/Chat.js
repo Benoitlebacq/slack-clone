@@ -119,6 +119,10 @@ const Chat = () => {
     })
   }
 
+  const addPersonToChannel = () => {
+    console.log("ouhouh")
+  }
+
   const userArrayWithDuplicate = []
 
   return (
@@ -146,7 +150,7 @@ const Chat = () => {
                   [...new Set(userArrayWithDuplicate)].length)
                 }
               </NumberOfPeopleInChat>
-              <PersonAddIcon />
+              <PersonAddIcon onClick={addPersonToChannel} />
               <InfoOutlined
                 onClick={() => alert("TODO :: DETAILS DU CHAN")}
               />{" "}
