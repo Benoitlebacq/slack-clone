@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useAuthState } from "react-firebase-hooks/auth"
 import Swal from "sweetalert2/src/sweetalert2.js"
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
+import { useCollection } from "react-firebase-hooks/firestore"
 
 const SidebarOption = ({
   Icon,
@@ -20,6 +21,7 @@ const SidebarOption = ({
   expandApps,
   expandChannels,
 }) => {
+  const [channels] = useCollection(db.collection("rooms"))
   const [user] = useAuthState(auth)
   const themeIsDark = useSelector(selectTheme)
   const dispatch = useDispatch()
@@ -61,6 +63,16 @@ const SidebarOption = ({
       allowOutsideClick: false,
     })
     if (!formValues?.[0] && formValues?.[1] !== "") {
+      channels.docs.forEach((doc) => {
+        if (doc.data().name === formValues[1]) {
+          Swal.fire({
+            title: `This Channel name already exists`,
+            icon: "error",
+            allowOutsideClick: () => !Swal.isLoading(),
+          })
+          return
+        }
+      })
       db.collection("rooms").add({
         name: formValues[1],
         createdBy: user?.uid,

@@ -90,7 +90,7 @@ export const ChatInputContainer = styled.div`
   }
 `
 export const ChatBottom = styled.div`
-  padding-bottom: 12.5rem;
+  padding-bottom: 10.5rem;
 `
 export const NumberOfPeopleInChat = styled.div`
   margin-right: 1.25rem;
