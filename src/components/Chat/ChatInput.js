@@ -39,6 +39,7 @@ const ChatInput = ({ channelName, channelId, chatRef }) => {
           value={input || ""}
           onChange={(e) => setInput(e.target.value)}
           placeholder={`Send a Message to #${channelName}`}
+          autoFocus
         />
         <Button hidden type="submit" onClick={sendMessage}>
           SEND

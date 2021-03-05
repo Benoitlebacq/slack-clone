@@ -14,7 +14,6 @@ import {
   ExpandMore,
   Add,
   Edit,
-  EnhancedEncryptionOutlined,
 } from "@material-ui/icons"
 import { auth, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
@@ -81,12 +80,6 @@ const Sidebar = () => {
       />
       <Expand open={isChannelsExpanded}>
         <SidebarOption Icon={Add} addChannelOption title="Add Channel" />
-        <SidebarOption
-          Icon={EnhancedEncryptionOutlined}
-          addChannelOption
-          isPrivate
-          title="Add Private Channel"
-        />
         {channels?.docs.map((doc) => (
           <SidebarOption
             title={doc.data().name}
