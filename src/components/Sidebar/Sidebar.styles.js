@@ -108,6 +108,11 @@ export const SidebarOptionContainer = styled.div`
 export const SidebarOptionChannel = styled.h3`
   padding: 0.625rem 0;
   font-weight: 300;
+
+  > .MuiSvgIcon-root {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
 `
 export const Hashtag = styled.div`
   margin-left: 0.95rem;

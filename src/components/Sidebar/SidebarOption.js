@@ -20,6 +20,7 @@ const SidebarOption = ({
   id,
   expandApps,
   expandChannels,
+  usersAllowed,
 }) => {
   const [channels] = useCollection(db.collection("rooms"))
   const [user] = useAuthState(auth)
@@ -112,6 +113,9 @@ const SidebarOption = ({
   }
 
   const selectChannel = () => {
+    {
+      console.log(usersAllowed)
+    }
     if (channelPassword && id) {
       const enteredPassword = prompt("enter the room password")
       enteredPassword === channelPassword
@@ -135,12 +139,75 @@ const SidebarOption = ({
     }
   }
 
+  const renderChannels = () => {
+    if (expandApps) {
+      return (
+        <>
+          <Icon fontSize="small" style={{ padding: 10 }} onClick={expandApps} />
+          <h3>{title}</h3>
+        </>
+      )
+    } else if (expandChannels) {
+      return (
+        <>
+          <Icon
+            fontSize="small"
+            style={{ padding: 10 }}
+            onClick={expandChannels}
+          />
+          <h3>{title}</h3>
+        </>
+      )
+    } else if (Icon) {
+      return (
+        <>
+          <Icon fontSize="small" style={{ padding: 10 }} />
+          <h3>{title}</h3>
+        </>
+      )
+    } else {
+      if (usersAllowed[0] === "all") {
+        return (
+          <SidebarOptionChannel>
+            <Hashtag>#</Hashtag> {title}
+          </SidebarOptionChannel>
+        )
+      }
+      if (usersAllowed.includes(user.uid)) {
+        return (
+          <SidebarOptionChannel>
+            <LockOutlinedIcon /> {title}
+          </SidebarOptionChannel>
+        )
+      }
+    }
+    // {expandApps ? (
+    //   <Icon fontSize="small" style={{ padding: 10 }} onClick={expandApps} />
+    // ) : expandChannels ? (
+    //   <Icon
+    //     fontSize="small"
+    //     style={{ padding: 10 }}
+    //     onClick={expandChannels}
+    //   />
+    // ) : (
+    //   Icon && <Icon fontSize="small" style={{ padding: 10 }} />
+    // )}
+    // {Icon ? (
+    //   <h3>{title}</h3>
+    // ) : (
+    //   <SidebarOptionChannel>
+    //     <Hashtag>#</Hashtag> {title}
+    //   </SidebarOptionChannel>
+    // )}
+  }
+
   return (
     <SidebarOptionContainer
       darkTheme={themeIsDark}
       onClick={addChannelOption ? addChannelPopupWithTheme : selectChannel}
     >
-      {expandApps ? (
+      {renderChannels()}
+      {/* {expandApps ? (
         <Icon fontSize="small" style={{ padding: 10 }} onClick={expandApps} />
       ) : expandChannels ? (
         <Icon
@@ -153,20 +220,27 @@ const SidebarOption = ({
       )}
       {Icon ? (
         <h3>{title}</h3>
-      ) : channelPassword ? (
-        <SidebarOptionChannel>
-          <span>
-            <LockOutlinedIcon fontSize="small" />
-          </span>
-          {title}
-        </SidebarOptionChannel>
       ) : (
         <SidebarOptionChannel>
           <Hashtag>#</Hashtag> {title}
         </SidebarOptionChannel>
-      )}
+      )}*/}
     </SidebarOptionContainer>
   )
 }
 
 export default SidebarOption
+
+// if (usersAllowed[0] === "all") {
+//   return (
+//     <>
+//       <Hashtag>#</Hashtag> {title}
+//     </>
+//   )
+// }
+// if (usersAllowed.includes(user.uid)) {
+//   return (
+//     <>
+//       <Hashtag>#</Hashtag> {title}
+//     </>
+//   )
