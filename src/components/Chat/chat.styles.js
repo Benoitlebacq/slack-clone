@@ -36,7 +36,7 @@ export const ChatHeaderLeft = styled.div`
     margin-right: 0.625rem;
   }
 
-  > h4 > .muiSvgIcon-root {
+  > h4 > .MuiSvgIcon-root {
     margin-left: 0.625rem;
     font-size: 1.125rem;
   }

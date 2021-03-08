@@ -22,7 +22,9 @@ import { useSelector } from "react-redux"
 import { selectTheme } from "../../features/appSlice"
 
 const Sidebar = () => {
-  const [channels] = useCollection(db.collection("rooms"))
+  const [channels] = useCollection(
+    db.collection("rooms").orderBy("name", "asc")
+  )
   const [user] = useAuthState(auth)
   const themeIsDark = useSelector(selectTheme)
   const [isAppsExpanded, setIsAppsExpanded] = useState(true)
@@ -47,6 +49,13 @@ const Sidebar = () => {
       : setExpandChannelsIcon(ExpandMore)
   }
 
+  const updateUserInfos = () => {
+    console.log(
+      "FAire une modale pour mettre a jour les données user",
+      user.uid
+    )
+  }
+
   return (
     <SidebarContainer darkTheme={themeIsDark}>
       <SidebarHeader darkTheme={themeIsDark}>
@@ -57,7 +66,7 @@ const Sidebar = () => {
             {user?.displayName}
           </h3>
         </SidebarInfo>
-        <Edit onClick={() => alert("TODO : EDIT USER DETAILS")} />
+        <Edit onClick={updateUserInfos} />
       </SidebarHeader>
       <Expand open={isAppsExpanded}>
         <SidebarOption Icon={InsertComment} title="Threads" />
