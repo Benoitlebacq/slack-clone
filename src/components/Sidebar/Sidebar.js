@@ -94,7 +94,7 @@ const Sidebar = () => {
             title={doc.data().name}
             key={doc.id}
             id={doc.id}
-            channelPassword={doc.data().channelPassword}
+            usersAllowed={doc.data().usersAllowed}
           />
         ))}
       </Expand>
