@@ -36,6 +36,17 @@ const SidebarOption = ({
     }
   }, [themeIsDark])
 
+  const capitalizeFirstLetter = (str) => {
+    if (!str) {
+      return ""
+    }
+    str = str.split(" ")
+    for (var i = 0, x = str.length; i < x; i++) {
+      str[i] = str[i][0].toUpperCase() + str[i].substr(1)
+    }
+    return str.join(" ")
+  }
+
   const enableSweetAlert2Theme = (theme) => {
     document.head
       .querySelector("#swal2-theme-styles")
@@ -54,66 +65,43 @@ const SidebarOption = ({
         "<div>Create Private Channel ?</div>" +
         '<input type="checkbox" id="swal-input1" class="swal2-checkbox" >',
       focusConfirm: false,
+      allowEnterKey: true,
       preConfirm: () => {
         return [
           document.getElementById("swal-input1").checked,
           document.getElementById("swal-input2").value,
         ]
       },
-      allowOutsideClick: false,
     })
+    const nameField = capitalizeFirstLetter(formValues?.[1])
     if (!formValues?.[0] && formValues?.[1] !== "") {
       channels.docs.forEach((doc) => {
-        if (doc.data().name === formValues[1]) {
+        if (doc.data().name === formValues?.[1]) {
           Swal.fire({
             title: `This Channel name already exists`,
             icon: "error",
-            allowOutsideClick: () => !Swal.isLoading(),
+            allowOutsideClick: false,
           })
           return
         }
       })
+      if (nameField !== "") {
+        db.collection("rooms").add({
+          name: nameField,
+          createdBy: user?.uid,
+          creatorName: user?.displayName,
+          usersAllowed: ["all"],
+        })
+      }
+      return
+    } else if (formValues[0] && formValues[1] !== "") {
       db.collection("rooms").add({
-        name: formValues[1],
+        name: capitalizeFirstLetter(formValues[1]),
         createdBy: user?.uid,
         creatorName: user?.displayName,
+        isPrivate: true,
+        usersAllowed: [user?.uid],
       })
-    } else if (formValues[0] && formValues[1] !== "") {
-      Swal.mixin({
-        confirmButtonText: "Next &rarr;",
-        showCancelButton: true,
-        progressSteps: ["1", "2"],
-        allowOutsideClick: false,
-      })
-        .queue([
-          { input: "password", title: "Enter the password" },
-          { input: "password", title: "Enter the password again" },
-        ])
-        .then((result) => {
-          if (result.dismiss === "cancel") {
-            return
-          }
-          if (result.value[0] !== result.value[1]) {
-            Swal.fire({
-              title: `You must enter the same password`,
-              icon: "error",
-              allowOutsideClick: () => !Swal.isLoading(),
-            })
-          }
-          if (result.value[0] === result.value[1]) {
-            db.collection("rooms").add({
-              name: result.value[0],
-              createdBy: user?.uid,
-              creatorName: user?.displayName,
-              channelPassword: result.value[1],
-            })
-            Swal.fire({
-              title: `The Private Channel "#${result.value[0]}" has been created`,
-              confirmButtonText: "Done!",
-              allowOutsideClick: () => !Swal.isLoading(),
-            })
-          }
-        })
     } else if (formValues[1] === "") {
       Swal.fire({
         title: `You must enter a Channel name`,

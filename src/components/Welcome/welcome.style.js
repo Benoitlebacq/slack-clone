@@ -9,6 +9,19 @@ export const WelcomeContainer = styled.div`
   > img {
     height: 10rem;
     width: 10rem;
+
+    animation-name: spin;
+    animation-duration: 200ms;
+    animation-iteration-count: 1s;
+    animation-timing-function: linear;
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
   }
 
   > p {

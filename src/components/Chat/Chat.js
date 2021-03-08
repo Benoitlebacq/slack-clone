@@ -25,9 +25,17 @@ import { enterRoom } from "../../features/appSlice"
 import { useAuthState } from "react-firebase-hooks/auth"
 import PeopleIcon from "@material-ui/icons/People"
 import PersonAddIcon from "@material-ui/icons/PersonAdd"
+import { DataGrid } from "@material-ui/data-grid"
+import { Button, Modal } from "@material-ui/core"
 
 const Chat = () => {
+  const userArrayWithDuplicate = []
+
+  const [rows, setRows] = useState({})
+  const [open, setOpen] = useState(false)
+  const [selectionModel, setSelectionModel] = useState([])
   const [isPopupDark, setIsPopupDark] = useState("default")
+
   const dispatch = useDispatch()
   const chatRef = useRef(null)
   const roomId = useSelector(selectRoomId)
@@ -45,14 +53,23 @@ const Chat = () => {
         .orderBy("timestamp", "asc")
   )
 
-  // scroll chat to the bottom
+  // Scroll chat to the bottom
   useEffect(() => {
     chatRef?.current?.scrollIntoView({
       behavior: "smooth",
     })
   }, [roomId, loading])
 
-  // Set theme for PopUp
+  // Get all users in db
+  useEffect(() => {
+    async function init() {
+      const userListRow = await addPersonToChannel()
+      setRows(userListRow)
+    }
+    init()
+  }, [])
+
+  // Set theme for Swal PopUp
   useEffect(() => {
     if (themeIsDark) {
       setIsPopupDark("dark")
@@ -69,6 +86,15 @@ const Chat = () => {
         "href",
         `https://cdn.jsdelivr.net/npm/@sweetalert2/theme-${theme}/${theme}.css`
       )
+  }
+
+  /////////// Modal functions and datas
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
   }
 
   const toggleAlertWithTheme = async () => {
@@ -118,11 +144,36 @@ const Chat = () => {
     })
   }
 
-  const addPersonToChannel = () => {
-    console.log("ouhouh")
+  // Get all user in Db but the logged user
+  const addPersonToChannel = async () => {
+    const userList = []
+    let allUsers = await db.collection("users").get()
+    allUsers.forEach((doc) =>
+      doc.data().id !== user.uid ? userList.push(doc.data()) : null
+    )
+    return userList
   }
 
-  const userArrayWithDuplicate = []
+  const data = {
+    columns: [
+      { field: "id", hide: true },
+      { field: "userName", headerName: "User Name", width: 400 },
+    ],
+    rows: rows,
+  }
+
+  const triggerSelection = (selectionModel) => {
+    const updatedUsersAllowed = [
+      ...roomDetails.data().usersAllowed,
+      ...selectionModel,
+    ]
+    db.collection("rooms").doc(roomId).update({
+      usersAllowed: updatedUsersAllowed,
+    })
+
+    handleClose()
+  }
+  /////////////////////////////////////
 
   return (
     <ChatContainer darkTheme={themeIsDark}>
@@ -137,25 +188,57 @@ const Chat = () => {
               <p>created by {roomDetails?.data()?.creatorName}</p>
             </ChatHeaderLeft>
             <ChatHeaderRight>
-              <PeopleIcon
-                onClick={() => alert([...new Set(userArrayWithDuplicate)])}
-              />
+              <PeopleIcon onClick={() => alert("TODO : LISTE DES USERS")} />
               <NumberOfPeopleInChat>
-                {
-                  (roomMessages?.docs.forEach((doc) => {
-                    const { user } = doc.data()
-                    userArrayWithDuplicate.push(user)
-                  }),
-                  [...new Set(userArrayWithDuplicate)].length)
-                }
+                {roomDetails.data().isPrivate
+                  ? (roomDetails
+                      .data()
+                      .usersAllowed?.map((user) =>
+                        userArrayWithDuplicate.push(user)
+                      ),
+                    userArrayWithDuplicate.length)
+                  : (roomMessages?.docs.forEach((doc) => {
+                      const { user } = doc.data()
+                      userArrayWithDuplicate.push(user)
+                    }),
+                    [...new Set(userArrayWithDuplicate)].length)}
               </NumberOfPeopleInChat>
-              <PersonAddIcon onClick={addPersonToChannel} />
+              <PersonAddIcon onClick={handleOpen} />
               <InfoOutlined
                 onClick={() => alert("TODO :: DETAILS DU CHAN")}
               />{" "}
               <DeleteForever onClick={() => toggleAlertWithTheme()} />
             </ChatHeaderRight>
           </ChatHeader>
+          <Modal open={open} onClose={handleClose}>
+            <div
+              style={{
+                height: 400,
+                width: "40%",
+                backgroundColor: "white",
+                marginTop: "20vh",
+                marginLeft: "35%",
+              }}
+            >
+              <DataGrid
+                checkboxSelection
+                onSelectionModelChange={(newSelection) => {
+                  setSelectionModel(newSelection.selectionModel)
+                }}
+                selectionModel={selectionModel}
+                {...data}
+              />
+              <Button
+                style={{
+                  backgroundColor: themeIsDark ? "dimgray" : "#3f0f40",
+                  color: "white",
+                }}
+                onClick={() => triggerSelection(selectionModel)}
+              >
+                ok
+              </Button>
+            </div>
+          </Modal>
           <ChatMessages>
             {roomMessages?.docs.map((doc) => {
               const { message, timestamp, user, userImage } = doc.data()
