@@ -181,24 +181,6 @@ const SidebarOption = ({
         )
       }
     }
-    // {expandApps ? (
-    //   <Icon fontSize="small" style={{ padding: 10 }} onClick={expandApps} />
-    // ) : expandChannels ? (
-    //   <Icon
-    //     fontSize="small"
-    //     style={{ padding: 10 }}
-    //     onClick={expandChannels}
-    //   />
-    // ) : (
-    //   Icon && <Icon fontSize="small" style={{ padding: 10 }} />
-    // )}
-    // {Icon ? (
-    //   <h3>{title}</h3>
-    // ) : (
-    //   <SidebarOptionChannel>
-    //     <Hashtag>#</Hashtag> {title}
-    //   </SidebarOptionChannel>
-    // )}
   }
 
   return (
@@ -207,40 +189,8 @@ const SidebarOption = ({
       onClick={addChannelOption ? addChannelPopupWithTheme : selectChannel}
     >
       {renderChannels()}
-      {/* {expandApps ? (
-        <Icon fontSize="small" style={{ padding: 10 }} onClick={expandApps} />
-      ) : expandChannels ? (
-        <Icon
-          fontSize="small"
-          style={{ padding: 10 }}
-          onClick={expandChannels}
-        />
-      ) : (
-        Icon && <Icon fontSize="small" style={{ padding: 10 }} />
-      )}
-      {Icon ? (
-        <h3>{title}</h3>
-      ) : (
-        <SidebarOptionChannel>
-          <Hashtag>#</Hashtag> {title}
-        </SidebarOptionChannel>
-      )}*/}
     </SidebarOptionContainer>
   )
 }
 
 export default SidebarOption
-
-// if (usersAllowed[0] === "all") {
-//   return (
-//     <>
-//       <Hashtag>#</Hashtag> {title}
-//     </>
-//   )
-// }
-// if (usersAllowed.includes(user.uid)) {
-//   return (
-//     <>
-//       <Hashtag>#</Hashtag> {title}
-//     </>
-//   )
