@@ -30,6 +30,7 @@ import { Button, Modal } from "@material-ui/core"
 
 const Chat = () => {
   const userArrayWithDuplicate = []
+  const [users] = useCollection(db.collection("users"))
 
   const [rows, setRows] = useState({})
   const [open, setOpen] = useState(false)
@@ -63,11 +64,11 @@ const Chat = () => {
   // Get all users in db
   useEffect(() => {
     async function init() {
-      const userListRow = await addPersonToChannel()
-      setRows(userListRow)
+      const addableUserListRow = await addPersonToChannel()
+      setRows(addableUserListRow)
     }
     init()
-  }, [])
+  }, [roomId, loading])
 
   // Set theme for Swal PopUp
   useEffect(() => {
@@ -144,14 +145,22 @@ const Chat = () => {
     })
   }
 
-  // Get all user in Db but the logged user
+  console.log("USers in ROOM:::: ", roomDetails?.data().usersAllowed)
+
+  users.forEach((e) => console.log(e.data()))
+
   const addPersonToChannel = async () => {
-    const userList = []
+    const usersCanBeAddList = []
     let allUsers = await db.collection("users").get()
+    // Get all user in Db but the logged user
     allUsers.forEach((doc) =>
-      doc.data().id !== user.uid ? userList.push(doc.data()) : null
+      doc.data().id !== user.uid ? usersCanBeAddList.push(doc.data()) : null
     )
-    return userList
+    // Remove the users already in the room from the list
+    const filteredUsersCanBeAddList = usersCanBeAddList.filter((user) => {
+      if (!roomDetails?.data().usersAllowed.includes(user.id)) return user
+    })
+    return filteredUsersCanBeAddList
   }
 
   const data = {

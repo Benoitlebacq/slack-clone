@@ -22,7 +22,6 @@ function Login() {
             isDarkTheme: false,
             id: result.user.uid,
             photoURL: result.user.photoURL,
-            channelAccessList: [],
           })
         }
       })

@@ -16,7 +16,6 @@ const SidebarOption = ({
   Icon,
   title,
   addChannelOption,
-  channelPassword,
   id,
   expandApps,
   expandChannels,
@@ -113,24 +112,7 @@ const SidebarOption = ({
   }
 
   const selectChannel = () => {
-    {
-      console.log(usersAllowed)
-    }
-    if (channelPassword && id) {
-      const enteredPassword = prompt("enter the room password")
-      enteredPassword === channelPassword
-        ? dispatch(
-            enterRoom({
-              roomId: id,
-            })
-          )
-        : dispatch(
-            enterRoom({
-              roomId: null,
-            })
-          )
-    }
-    if (!channelPassword && id) {
+    if (id) {
       dispatch(
         enterRoom({
           roomId: id,
