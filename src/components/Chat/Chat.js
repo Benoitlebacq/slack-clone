@@ -30,6 +30,7 @@ import { Button, Modal } from "@material-ui/core"
 
 const Chat = () => {
   const userArrayWithDuplicate = []
+  const usersInRoomArray = []
   const [users] = useCollection(db.collection("users"))
 
   const [rows, setRows] = useState({})
@@ -53,6 +54,7 @@ const Chat = () => {
         .collection("messages")
         .orderBy("timestamp", "asc")
   )
+  const usersAllowedArray = roomDetails?.data().usersAllowed
 
   // Scroll chat to the bottom
   useEffect(() => {
@@ -145,15 +147,12 @@ const Chat = () => {
     })
   }
 
-  const usersInRoomArray = []
-  const usersAllowedArray = roomDetails?.data().usersAllowed
   users?.forEach((e) => {
     usersAllowedArray?.map((user) => {
       if (e.data().id === user) {
         usersInRoomArray.push(e.data().userName)
       }
     })
-    return usersInRoomArray
   })
 
   const addPersonToChannel = async () => {
@@ -204,7 +203,9 @@ const Chat = () => {
               <p>created by {roomDetails?.data()?.creatorName}</p>
             </ChatHeaderLeft>
             <ChatHeaderRight>
-              <PeopleIcon onClick={() => alert("TODO : LISTE DES USERS")} />
+              <PeopleIcon
+                onClick={() => Swal.fire(usersInRoomArray.toString())}
+              />
               <NumberOfPeopleInChat>
                 {roomDetails.data().isPrivate
                   ? (roomDetails
