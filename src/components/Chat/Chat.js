@@ -145,9 +145,16 @@ const Chat = () => {
     })
   }
 
-  console.log("USers in ROOM:::: ", roomDetails?.data().usersAllowed)
-
-  users.forEach((e) => console.log(e.data()))
+  const usersInRoomArray = []
+  const usersAllowedArray = roomDetails?.data().usersAllowed
+  users?.forEach((e) => {
+    usersAllowedArray?.map((user) => {
+      if (e.data().id === user) {
+        usersInRoomArray.push(e.data().userName)
+      }
+    })
+    return usersInRoomArray
+  })
 
   const addPersonToChannel = async () => {
     const usersCanBeAddList = []

@@ -6,7 +6,12 @@ import {
   Headersearch,
 } from "./header.styles"
 import { useDispatch, useSelector } from "react-redux"
-import { changeTheme, selectTheme } from "../../features/appSlice"
+import {
+  changeTheme,
+  selectTheme,
+  selectRoomId,
+  enterRoom,
+} from "../../features/appSlice"
 import AccessTimeIcon from "@material-ui/icons/AccessTime"
 import SearchIcon from "@material-ui/icons/Search"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
@@ -21,6 +26,7 @@ const Header = () => {
   const darkTheme = useRef()
   const dispatch = useDispatch()
   const themeIsDark = useSelector(selectTheme)
+  const roomId = useSelector(selectRoomId)
   const [users] = useCollection(db.collection("users"))
 
   // Find User in firebase and set darkTheme value
@@ -63,13 +69,22 @@ const Header = () => {
     )
   }
 
+  const signUserOut = () => {
+    auth.signOut()
+    dispatch(
+      enterRoom({
+        roomId: null,
+      })
+    )
+  }
+
   return (
     <HeaderContainer darkTheme={themeIsDark}>
       <HeaderLeft>
         <img
           src={user?.photoURL}
           alt={user?.displayName}
-          onClick={() => auth.signOut()}
+          onClick={signUserOut}
         />
         <AccessTimeIcon />
       </HeaderLeft>
