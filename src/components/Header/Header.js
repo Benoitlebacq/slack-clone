@@ -11,6 +11,7 @@ import {
   selectTheme,
   selectRoomId,
   enterRoom,
+  selectUserPhotoURL,
 } from "../../features/appSlice"
 import AccessTimeIcon from "@material-ui/icons/AccessTime"
 import SearchIcon from "@material-ui/icons/Search"
@@ -22,6 +23,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel"
 import { useCollection } from "react-firebase-hooks/firestore"
 
 const Header = () => {
+  const userPhotoURL = useSelector(selectUserPhotoURL)
   const [user] = useAuthState(auth)
   const darkTheme = useRef()
   const dispatch = useDispatch()
@@ -81,11 +83,7 @@ const Header = () => {
   return (
     <HeaderContainer darkTheme={themeIsDark}>
       <HeaderLeft>
-        <img
-          src={user?.photoURL}
-          alt={user?.displayName}
-          onClick={signUserOut}
-        />
+        <img src={userPhotoURL} alt={user?.displayName} onClick={signUserOut} />
         <AccessTimeIcon />
       </HeaderLeft>
       <Headersearch darkTheme={themeIsDark}>
