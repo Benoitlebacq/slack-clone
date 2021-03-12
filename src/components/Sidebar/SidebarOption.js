@@ -74,6 +74,14 @@ const SidebarOption = ({
       },
     })
     const nameField = capitalizeFirstLetter(formValues?.[1])
+    if (nameField.length > 18) {
+      Swal.fire({
+        title: `The Channel Name must be 18 characters long Maximum`,
+        icon: "error",
+        allowOutsideClick: () => !Swal.isLoading(),
+      })
+      return
+    }
     if (!formValues?.[0] && formValues?.[1] !== "") {
       channels.docs.forEach((doc) => {
         if (doc.data().name === formValues?.[1]) {
