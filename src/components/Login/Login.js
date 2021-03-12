@@ -29,7 +29,6 @@ function Login() {
           } else return false
         })
         if (userAlreadyExists.indexOf(true) !== -1) {
-          console.log(" ----  ::::::::::", user[0])
           return (
             dispatch(
               changeUserDisplayName({

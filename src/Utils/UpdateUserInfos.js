@@ -95,7 +95,7 @@ const UpdateUserInfos = () => {
     const file = e.target.files[0]
     if (file) {
       const fileType = file["type"]
-      const validImageType = ["image/gif", "image/jpeg", "image/png"]
+      const validImageType = ["image/jpg", "image/jpeg", "image/png"]
       if (validImageType.includes(fileType)) {
         setError("")
         setImage(file)
