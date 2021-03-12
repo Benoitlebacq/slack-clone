@@ -207,27 +207,25 @@ const Chat = () => {
               <p>created by {roomDetails?.data()?.creatorName}</p>
             </ChatHeaderLeft>
             <ChatHeaderRight>
-              <PeopleIcon
-                onClick={() => Swal.fire(usersInRoomArray.toString())}
-              />
-              <NumberOfPeopleInChat>
-                {roomDetails.data().isPrivate
-                  ? (roomDetails
-                      .data()
-                      .usersAllowed?.map((user) =>
-                        userArrayWithDuplicate.push(user)
-                      ),
-                    userArrayWithDuplicate.length)
-                  : (roomMessages?.docs.forEach((doc) => {
-                      const { user } = doc.data()
-                      userArrayWithDuplicate.push(user)
-                    }),
-                    [...new Set(userArrayWithDuplicate)].length)}
-              </NumberOfPeopleInChat>
-              <PersonAddIcon onClick={handleOpen} />
-              <InfoOutlined
-                onClick={() => alert("TODO :: DETAILS DU CHAN")}
-              />{" "}
+              {roomDetails.data().isPrivate ? (
+                <>
+                  <PeopleIcon
+                    onClick={() => Swal.fire(usersInRoomArray.toString())}
+                  />
+                  <NumberOfPeopleInChat>
+                    {
+                      (roomDetails
+                        .data()
+                        .usersAllowed?.map((user) =>
+                          userArrayWithDuplicate.push(user)
+                        ),
+                      userArrayWithDuplicate.length)
+                    }
+                  </NumberOfPeopleInChat>
+                  <PersonAddIcon onClick={handleOpen} />
+                </>
+              ) : null}
+              <InfoOutlined onClick={() => alert("TODO :: DETAILS DU CHAN")} />{" "}
               <DeleteForever onClick={() => toggleAlertWithTheme()} />
             </ChatHeaderRight>
           </ChatHeader>
