@@ -36,12 +36,21 @@ const SidebarOption = ({
     }
   }, [themeIsDark])
 
+  // Sweet Alert Pop up Management ////////////
   const capitalizeFirstLetter = (str) => {
     if (!str) {
       return ""
     }
     str = str.split(" ")
     for (var i = 0, x = str.length; i < x; i++) {
+      if (!str[i][0]) {
+        Swal.fire({
+          title: `The Channel Name cannot contain double space`,
+          icon: "error",
+          allowOutsideClick: () => !Swal.isLoading(),
+        })
+        return ""
+      }
       str[i] = str[i][0].toUpperCase() + str[i].substr(1)
     }
     return str.join(" ")
@@ -74,6 +83,14 @@ const SidebarOption = ({
       },
     })
     const nameField = capitalizeFirstLetter(formValues?.[1])
+    if (nameField.length > 18) {
+      Swal.fire({
+        title: `The Channel Name must be 18 characters long Maximum`,
+        icon: "error",
+        allowOutsideClick: () => !Swal.isLoading(),
+      })
+      return
+    }
     if (!formValues?.[0] && formValues?.[1] !== "") {
       channels.docs.forEach((doc) => {
         if (doc.data().name === formValues?.[1]) {
@@ -110,6 +127,7 @@ const SidebarOption = ({
       })
     }
   }
+  //End of Sweet Alert Management /////////////
 
   const selectChannel = () => {
     if (id) {

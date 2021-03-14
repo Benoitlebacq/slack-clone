@@ -13,15 +13,16 @@ import {
   ExpandLess,
   ExpandMore,
   Add,
-  Edit,
 } from "@material-ui/icons"
 import { auth, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useSelector } from "react-redux"
-import { selectTheme } from "../../features/appSlice"
+import { selectTheme, selectUserDisplayName } from "../../features/appSlice"
+import UpdateUserInfos from "../../Utils/UpdateUserInfos"
 
 const Sidebar = () => {
+  const userDisplayName = useSelector(selectUserDisplayName)
   const [channels] = useCollection(
     db.collection("rooms").orderBy("name", "asc")
   )
@@ -49,13 +50,6 @@ const Sidebar = () => {
       : setExpandChannelsIcon(ExpandMore)
   }
 
-  const updateUserInfos = () => {
-    console.log(
-      "FAire une modale pour mettre a jour les données user",
-      user.uid
-    )
-  }
-
   return (
     <SidebarContainer darkTheme={themeIsDark}>
       <SidebarHeader darkTheme={themeIsDark}>
@@ -63,10 +57,10 @@ const Sidebar = () => {
           <h2>Slack</h2>
           <h3>
             <FiberManualRecord />
-            {user?.displayName}
+            {userDisplayName}
           </h3>
         </SidebarInfo>
-        <Edit onClick={updateUserInfos} />
+        <UpdateUserInfos />
       </SidebarHeader>
       <Expand open={isAppsExpanded}>
         <SidebarOption Icon={InsertComment} title="Threads" />

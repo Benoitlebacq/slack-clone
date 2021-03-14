@@ -3,26 +3,73 @@ import { LoginContainer, LoginInnerContainer } from "./login.styles"
 import { Button } from "@material-ui/core"
 import { auth, provider, db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
+import { useDispatch } from "react-redux"
+import {
+  changeUserPhotoURL,
+  changeUserDisplayName,
+  changeUserId,
+} from "../../features/appSlice"
 
 function Login() {
   const [users] = useCollection(db.collection("users"))
+  const dispatch = useDispatch()
 
   const signIn = (e) => {
     e.preventDefault()
     auth
       .signInWithPopup(provider)
       .then((result) => {
-        const idArray = []
-        users.docs.map((doc) => idArray.push(doc.data().id))
-        if (idArray.includes(result.user.uid)) {
-          return null
+        const usersArray = []
+        const user = []
+        users.docs.map((doc) => usersArray.push(doc.data()))
+        const userAlreadyExists = usersArray.map((userInArray, i) => {
+          if (usersArray[i].id === result.user.uid) {
+            user.push(usersArray[i])
+            return true
+          } else return false
+        })
+        if (userAlreadyExists.indexOf(true) !== -1) {
+          return (
+            dispatch(
+              changeUserDisplayName({
+                userDisplayName: user[0].userName,
+              })
+            ),
+            dispatch(
+              changeUserPhotoURL({
+                userPhotoURL: user[0].photoURL,
+              })
+            ),
+            dispatch(
+              changeUserId({
+                userId: user[0].id,
+              })
+            )
+          )
         } else {
-          return db.collection("users").add({
-            userName: result.user.displayName,
-            isDarkTheme: false,
-            id: result.user.uid,
-            photoURL: result.user.photoURL,
-          })
+          return (
+            db.collection("users").add({
+              userName: result.user.displayName,
+              isDarkTheme: false,
+              id: result.user.uid,
+              photoURL: result.user.photoURL,
+            }),
+            dispatch(
+              changeUserDisplayName({
+                userDisplayName: result.user.displayName,
+              })
+            ),
+            dispatch(
+              changeUserPhotoURL({
+                userPhotoURL: result.user.photoURL,
+              })
+            ),
+            dispatch(
+              changeUserId({
+                userId: result.user.uid,
+              })
+            )
+          )
         }
       })
       .catch((error) => alert(error.message))
