@@ -95,3 +95,6 @@ export const ChatBottom = styled.div`
 export const NumberOfPeopleInChat = styled.div`
   margin-right: 1.25rem;
 `
+export const PublicChannel = styled.div`
+  margin-right: 0.625rem;
+`
