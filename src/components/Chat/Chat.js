@@ -103,10 +103,12 @@ const Chat = () => {
   const toggleAlertWithTheme = async () => {
     await Swal.fire({
       willOpen: () => enableSweetAlert2Theme(isPopupDark),
-      title: `Are you sure you want to Delete the channel "#${
+      title: `Are you sure you want to Delete`,
+      html: `<font size='5rem'>the channel "#${
         roomDetails?.data().name
-      }" ?`,
-      html: "<font color='red'>You won't be able to revert this!</font>",
+      }" ?</font>
+      <br>
+      <font color='red'>You won't be able to revert this!</font>`,
       icon: "warning",
       iconColor: "red",
       showCancelButton: true,
@@ -135,7 +137,7 @@ const Chat = () => {
         } else {
           Swal.fire({
             title: "Cancelled",
-            text: `You can't delete channel "${
+            html: `<font color='red'>You can't delete</font> channel "${
               roomDetails?.data().name
             }", because you didn't create it.`,
             icon: "error",
@@ -210,7 +212,13 @@ const Chat = () => {
               {roomDetails.data().isPrivate ? (
                 <>
                   <PeopleIcon
-                    onClick={() => Swal.fire(usersInRoomArray.toString())}
+                    onClick={() =>
+                      Swal.fire({
+                        toast: true,
+                        position: "top-end",
+                        text: `Users in room: ${usersInRoomArray.toString()}`,
+                      })
+                    }
                   />
                   <NumberOfPeopleInChat>
                     {
