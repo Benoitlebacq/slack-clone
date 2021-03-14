@@ -9,6 +9,7 @@ import {
   ChatMessages,
   ChatBottom,
   NumberOfPeopleInChat,
+  PublicChannel,
 } from "./chat.styles"
 import {
   StarBorderOutlined,
@@ -232,7 +233,9 @@ const Chat = () => {
                   </NumberOfPeopleInChat>
                   <PersonAddIcon onClick={handleOpen} />
                 </>
-              ) : null}
+              ) : (
+                <PublicChannel>Public Channel</PublicChannel>
+              )}
               <InfoOutlined onClick={() => alert("TODO :: DETAILS DU CHAN")} />{" "}
               <DeleteForever onClick={() => toggleAlertWithTheme()} />
             </ChatHeaderRight>

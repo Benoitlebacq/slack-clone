@@ -96,9 +96,11 @@ const UpdateUserInfos = () => {
     if (file) {
       const fileType = file["type"]
       const validImageType = ["image/jpg", "image/jpeg", "image/png"]
-      if (validImageType.includes(fileType)) {
+      if (validImageType.includes(fileType) && file.size < 405000) {
         setError("")
         setImage(file)
+      } else if (validImageType.includes(fileType) && file.size > 505000) {
+        setError("The image should not be more thant 500 kb")
       }
     } else {
       setError("Please select an image to upload")
