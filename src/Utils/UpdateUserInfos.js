@@ -16,19 +16,14 @@ import AccountCircle from "@material-ui/icons/AccountCircle"
 import { useDispatch, useSelector } from "react-redux"
 import {
   selectTheme,
-  selectUserDisplayName,
-  selectUserPhotoURL,
   selectUserId,
   changeUserDisplayName,
   changeUserPhotoURL,
-  changeUserId,
 } from "../features/appSlice"
 import { useCollection } from "react-firebase-hooks/firestore"
 import { useAuthState } from "react-firebase-hooks/auth"
 
 const UpdateUserInfos = () => {
-  const userDisplayName = useSelector(selectUserDisplayName)
-  const userPhotoURL = useSelector(selectUserPhotoURL)
   const userId = useSelector(selectUserId)
   const dispatch = useDispatch()
   const [image, setImage] = useState(null)
@@ -36,7 +31,6 @@ const UpdateUserInfos = () => {
   const [progressBar, setProgressBar] = useState(0)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
-  const [displayName, setDisplayName] = useState("")
   const [open, setOpen] = useState(false)
   const [textInput, setTextInput] = useState("")
   const [users] = useCollection(db.collection("users"))

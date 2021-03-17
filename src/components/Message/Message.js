@@ -21,7 +21,9 @@ const Message = ({
   const [input, setInput] = useState(null)
   const [editMode, setEditMode] = useState(false)
   const [loggedUser] = useAuthState(auth)
-  const [rooms] = useCollection(db.collection("rooms"))
+  const [rooms] = useCollection(
+    db?.collection("rooms")?.doc(channelId)?.collection("messages")
+  )
 
   const handleEdit = () => {
     setInput(input)
@@ -30,21 +32,18 @@ const Message = ({
   const sendMessage = (e) => {
     e.preventDefault()
     // find the matching message in the database and change it.
-    rooms
-      .doc(channelId)
-      .collection("messages")
-      .forEach((docu) => {
-        if (docu.data().message === message) {
-          db.collection("rooms")
-            .doc(channelId)
-            .collection("messages")
-            .doc(docu.id)
-            .update({
-              message: input,
-            })
-          setEditMode(false)
-        }
-      })
+    rooms.forEach((docu) => {
+      if (docu.data().message === message) {
+        db.collection("rooms")
+          .doc(channelId)
+          .collection("messages")
+          .doc(docu.id)
+          .update({
+            message: input,
+          })
+        setEditMode(false)
+      }
+    })
   }
 
   return (
@@ -69,10 +68,10 @@ const Message = ({
           </form>
         )}
       </MessageInfo>
-      {loggedUser.uid === userId && editMode ? (
+      {editMode ? (
         <CloseIcon onClick={() => setEditMode(!editMode)} />
       ) : (
-        <EditIcon onClick={handleEdit} />
+        loggedUser.uid === userId && <EditIcon onClick={handleEdit} />
       )}
     </MessageContainer>
   )

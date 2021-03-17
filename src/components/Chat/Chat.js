@@ -165,10 +165,6 @@ const Chat = () => {
     allUsers.forEach((doc) =>
       doc.data().id !== user.uid ? usersCanBeAddList.push(doc.data()) : null
     )
-    // check if all user in array have an ID
-    const listOfUsersToFilter = usersCanBeAddList.filter((user) =>
-      user.hasOwnProperty("id")
-    )
     // Remove the users already in the room from the list
     const filteredUsersCanBeAddList = usersCanBeAddList.filter((user) => {
       if (!roomDetails?.data().usersAllowed.includes(user.id)) return user
@@ -280,7 +276,7 @@ const Chat = () => {
                   user={user}
                   userImage={userImage}
                   userId={userId}
-                  channelId={roomId}
+                  channelId={roomId || "yQ6miwpCjHQ934E9rgsz4KEahsP2"}
                 />
               )
             })}
