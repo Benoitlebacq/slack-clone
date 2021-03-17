@@ -9,6 +9,7 @@ import {
   selectTheme,
   selectUserPhotoURL,
   selectUserDisplayName,
+  selectUserId,
 } from "../../features/appSlice"
 
 const ChatInput = ({ channelName, channelId, chatRef }) => {
@@ -17,6 +18,7 @@ const ChatInput = ({ channelName, channelId, chatRef }) => {
   const themeIsDark = useSelector(selectTheme)
   const userPhotoURL = useSelector(selectUserPhotoURL)
   const userDisplayName = useSelector(selectUserDisplayName)
+  const userId = useSelector(selectUserId)
 
   const sendMessage = (e) => {
     e.preventDefault()
@@ -30,6 +32,7 @@ const ChatInput = ({ channelName, channelId, chatRef }) => {
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       user: userDisplayName,
       userImage: userPhotoURL,
+      userId: userId,
     })
 
     chatRef.current.scrollIntoView({
