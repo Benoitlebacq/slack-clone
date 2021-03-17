@@ -14,9 +14,8 @@ import {
   ExpandMore,
   Add,
 } from "@material-ui/icons"
-import { auth, db } from "../../firebase"
+import { db } from "../../firebase"
 import { useCollection } from "react-firebase-hooks/firestore"
-import { useAuthState } from "react-firebase-hooks/auth"
 import { useSelector } from "react-redux"
 import { selectTheme, selectUserDisplayName } from "../../features/appSlice"
 import UpdateUserInfos from "../../Utils/UpdateUserInfos"
@@ -26,7 +25,6 @@ const Sidebar = () => {
   const [channels] = useCollection(
     db.collection("rooms").orderBy("name", "asc")
   )
-  const [user] = useAuthState(auth)
   const themeIsDark = useSelector(selectTheme)
   const [isAppsExpanded, setIsAppsExpanded] = useState(true)
   const [isChannelsExpanded, setIsChannelsExpanded] = useState(true)

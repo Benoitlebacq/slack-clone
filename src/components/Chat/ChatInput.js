@@ -1,22 +1,22 @@
 import { Button } from "@material-ui/core"
 import React, { useState } from "react"
-import { auth, db } from "../../firebase"
+import { db } from "../../firebase"
 import { ChatInputContainer } from "./chat.styles"
 import firebase from "firebase"
-import { useAuthState } from "react-firebase-hooks/auth"
 import { useSelector } from "react-redux"
 import {
   selectTheme,
   selectUserPhotoURL,
   selectUserDisplayName,
+  selectUserId,
 } from "../../features/appSlice"
 
 const ChatInput = ({ channelName, channelId, chatRef }) => {
   const [input, setInput] = useState(null)
-  const [user] = useAuthState(auth)
   const themeIsDark = useSelector(selectTheme)
   const userPhotoURL = useSelector(selectUserPhotoURL)
   const userDisplayName = useSelector(selectUserDisplayName)
+  const userId = useSelector(selectUserId)
 
   const sendMessage = (e) => {
     e.preventDefault()
@@ -30,6 +30,7 @@ const ChatInput = ({ channelName, channelId, chatRef }) => {
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       user: userDisplayName,
       userImage: userPhotoURL,
+      userId: userId,
     })
 
     chatRef.current.scrollIntoView({
