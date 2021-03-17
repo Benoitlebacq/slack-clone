@@ -272,7 +272,6 @@ const Chat = () => {
           <ChatMessages>
             {roomMessages?.docs.map((doc) => {
               const { message, timestamp, user, userImage, userId } = doc.data()
-              console.log(doc.data())
               return (
                 <Message
                   key={doc.id}
@@ -281,6 +280,7 @@ const Chat = () => {
                   user={user}
                   userImage={userImage}
                   userId={userId}
+                  channelId={roomId}
                 />
               )
             })}

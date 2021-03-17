@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux"
 import {
   changeTheme,
   selectTheme,
-  selectRoomId,
   enterRoom,
   selectUserPhotoURL,
 } from "../../features/appSlice"
@@ -28,7 +27,6 @@ const Header = () => {
   const darkTheme = useRef()
   const dispatch = useDispatch()
   const themeIsDark = useSelector(selectTheme)
-  const roomId = useSelector(selectRoomId)
   const [users] = useCollection(db.collection("users"))
 
   // Find User in firebase and set darkTheme value
